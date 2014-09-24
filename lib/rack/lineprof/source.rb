@@ -48,6 +48,7 @@ module Rack
             threshold = thresholds.invert.detect { |th, _| ms > th }
             level = threshold ? threshold.last : CONTEXT
 
+            next if level_threshold > level
             next unless code = source_lines[line - 1]
             parsed << Sample.new(ms, calls, line, code, level)
           end
@@ -78,6 +79,9 @@ module Rack
         }.merge(options.fetch :thresholds, {})
       end
 
+      def level_threshold
+        @level_threshold ||= options.fetch :level_threshold, CONTEXT
+      end
     end
   end
 end
