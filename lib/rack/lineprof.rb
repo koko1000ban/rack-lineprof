@@ -26,10 +26,11 @@ module Rack
 
       response = nil
       profile = lineprof(%r{#{matcher}}) { response = @app.call env }
+      formated_profile = format_profile(profile)
 
-      unless profile.empty?
+      unless formated_profile.empty?
         puts Term::ANSIColor.blue("\n[Rack::Lineprof] #{'=' * 63}") + "\n\n" +
-             format_profile(profile) + "\n"
+             formated_profile + "\n"
       end
 
       response
